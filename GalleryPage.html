@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>She Can Foundation | Gallery Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            cursor: none;
+        }
+
+        :root {
+            --bg-dark: #0a0a0c;
+            --panel-dark: #121216;
+            --border-glow: #1f1f27;
+            --accent-glow: #7c3aed;
+            --text-main: #f3f4f6;
+            --text-muted: #8e8e9f;
+        }
+
+        html, body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        #custom-cursor {
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+            transition: width 0.2s, height 0.2s;
+        }
+
+        .clickable-hover:hover ~ #custom-cursor {
+            width: 50px;
+            height: 50px;
+        }
+
+        .fixed-join-trigger {
+            position: fixed;
+            right: 40px;
+            bottom: 40px;
+            background: var(--text-main);
+            color: var(--bg-dark);
+            text-decoration: none;
+            padding: 16px 32px;
+            font-weight: 600;
+            font-size: 14px;
+            border-radius: 40px;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.2);
+            z-index: 999;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .fixed-join-trigger:hover {
+            transform: scale(1.05) translateY(-3px);
+            background: var(--accent-glow);
+            color: var(--text-main);
+        }
+
+        header {
+            width: 100%;
+            border-bottom: 1px solid var(--border-glow);
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: rgba(10, 10, 12, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+        }
+
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 40px;
+        }
+
+        .brand-logo {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+        }
+
+        .brand-logo span {
+            color: var(--accent-glow);
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            margin-left: 35px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--text-main);
+        }
+
+        .gallery-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 160px 40px 60px 40px;
+            text-align: center;
+        }
+
+        .gallery-header h1 {
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            margin-bottom: 15px;
+        }
+
+        .gallery-header p {
+            color: var(--text-muted);
+            font-size: 16px;
+            margin-bottom: 60px;
+        }
+
+        .stack-viewport {
+            position: relative;
+            width: 100%;
+            max-width: 320px; /* Thinner standard card column width like reference */
+            height: 450px;
+            margin-bottom: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .deck-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 28px; /* Matches the clean rounded corners from your picture */
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6);
+            transform-origin: center center;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), z-index 0.6s step-end, opacity 0.4s ease;
+        }
+
+        .deck-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-label {
+            position: absolute;
+            bottom: 25px;
+            left: 25px;
+            background: rgba(10, 10, 12, 0.75);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-glow);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .click-hint {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-glow);
+            margin-top: 20px;
+        }
+
+        footer {
+            border-top: 1px solid var(--border-glow);
+            padding: 100px 40px 40px 40px;
+            background-color: #050507;
+        }
+
+        .footer-wrap {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 50px;
+        }
+
+        .footer-brand h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            max-width: 320px;
+            font-size: 14px;
+        }
+
+        .footer-group h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        .footer-group ul {
+            list-style: none;
+        }
+
+        .footer-group li {
+            margin-bottom: 12px;
+        }
+
+        .footer-group a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-group a:hover {
+            color: var(--text-main);
+        }
+
+        .footer-bottom-bar {
+            max-width: 1400px;
+            margin: 80px auto 0 auto;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-glow);
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="custom-cursor"></div>
+
+    <a href="#" class="fixed-join-trigger clickable-hover">Join Initiative</a>
+
+    <header>
+        <div class="nav-inner">
+            <div class="brand-logo clickable-hover">She Can Foundation<span>.</span></div>
+            <nav>
+                <a href="HomePage.html" class="clickable-hover">Home</a>
+                <a href="AboutPage.html" class="clickable-hover">About</a>
+                <a href="GalleryPage.html" class="active clickable-hover">Gallery</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="gallery-container">
+        <div class="gallery-header">
+            <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: var(--accent-glow); margin-bottom: 15px; display: block;">Gallery Page</span>
+            <h1 class="clickable-hover">Gallery</h1>
+            <p>"Together, we can break down barriers and empower women. At She Can Foundation, we believe that if we all do our part, there is no challenge too great to overcome. Join us in our mission to create a world where every woman has opportunity to thrive ans succeed."</p>
+        </div>
+
+        <div class="stack-viewport">
+            <div class="deck-card clickable-hover" onclick="rotateDeckCard(this)">
+                <img src="2.jpg" alt="She Can Foundation">
+                <div class="card-label">// Index 01 — She Can Foundation</div>
+            </div>
+            <div class="deck-card clickable-hover" onclick="rotateDeckCard(this)">
+                <img src="3.jpg" alt="She Can Foundation">
+                <div class="card-label">// Index 02 — She Can Foundation</div>
+            </div>
+            <div class="deck-card clickable-hover" onclick="rotateDeckCard(this)">
+                <img src="4.jpg" alt="She Can Foundation">
+                <div class="card-label">// Index 03 — She Can Foundation</div>
+            </div>
+            <div class="deck-card clickable-hover" onclick="rotateDeckCard(this)">
+                <img src="5.jpg" alt="She Can Foundation">
+                <div class="card-label">// Index 04 — She Can Foundation</div>
+            </div>
+            <div class="deck-card clickable-hover" onclick="rotateDeckCard(this)">
+                <img src="7.jpg" alt="She Can Foundation">
+                <div class="card-label">// Index 05 — She Can Foundation</div>
+            </div>
+			<div class="deck-card clickable-hover" onclick="rotateDeckCard(this)">
+                <img src="8.jpg" alt="She Can Foundation">
+                <div class="card-label">// Index 06 — She Can Foundation</div>
+            </div>
+        </div>
+
+        <div class="click-hint">‹ Click the top card smoothly ›</div>
+    </main>
+
+    <footer>
+        <div class="footer-wrap">
+            <div class="footer-brand">
+                <h2>She Can Foundation</h2>
+                <p>Registered National Initiative under the Indian Society Act. Grounded in functional execution and transparency matrix models.</p>
+            </div>
+            <div class="footer-group">
+                <h4>Ecosystem</h4>
+                <ul>
+                    <li><a href="HomePage.html" class="clickable-hover">Home</a></li>
+					<li><a href="AboutPage.html" class="clickable-hover">About</a></li>
+					<li><a href="GalleryPage.html" class="active clickable-hover">Gallery</a></li>
+                </ul>
+            </div>
+            <div class="footer-group">
+                <h4>Legal Indexes</h4>
+                <ul>
+                    <li><a href="#" class="clickable-hover">Govt. Reg. Status</a></li>
+                    <li><a href="#" class="clickable-hover">Society Act Records</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom-bar">
+            <span>&copy; 2026 She Can Foundation. Integrated Production System.</span>
+            <span>Secure Verification Verified</span>
+        </div>
+    </footer>
+
+    <script>
+        /* Tracking Invert Cursor Custom Initialization */
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        /* Beautiful Fanned Layout Stack Array Sorter */
+        let cards = Array.from(document.querySelectorAll('.deck-card'));
+        
+        function arrangeDeckStyle() {
+            const total = cards.length;
+            cards.forEach((card, index) => {
+                // If it is the front active top card
+                if (index === total - 1) {
+                    card.style.transform = "translateX(0px) rotate(0deg) scale(1)";
+                    card.style.zIndex = 50;
+                    card.style.opacity = "1";
+                    card.style.pointerEvents = "auto";
+                } 
+                // Second card down (spreads slightly right)
+                else if (index === total - 2) {
+                    card.style.transform = "translateX(90px) rotate(8deg) scale(0.96)";
+                    card.style.zIndex = 40;
+                    card.style.opacity = "0.95";
+                    card.style.pointerEvents = "none";
+                } 
+                // Third card down (spreads further right)
+                else if (index === total - 3) {
+                    card.style.transform = "translateX(170px) rotate(15deg) scale(0.92)";
+                    card.style.zIndex = 30;
+                    card.style.opacity = "0.85";
+                    card.style.pointerEvents = "none";
+                } 
+                // Fourth card down (spreads slightly left behind center)
+                else if (index === total - 4) {
+                    card.style.transform = "translateX(-90px) rotate(-8deg) scale(0.96)";
+                    card.style.zIndex = 20;
+                    card.style.opacity = "0.95";
+                    card.style.pointerEvents = "none";
+                } 
+                // Fifth card down (spreads further left)
+                else {
+                    card.style.transform = "translateX(-170px) rotate(-15deg) scale(0.92)";
+                    card.style.zIndex = 10;
+                    card.style.opacity = "0.85";
+                    card.style.pointerEvents = "none";
+                }
+            });
+        }
+
+        // Run setup logic immediately
+        arrangeDeckStyle();
+
+        function rotateDeckCard(clickedCard) {
+            // Only cycle if the user clicked the front active top card
+            if (cards.indexOf(clickedCard) !== cards.length - 1) return;
+
+            // Step 1: Smoothly translate down out of view with scale down
+            clickedCard.style.transform = "translateY(150px) rotate(10deg) scale(0.8)";
+            clickedCard.style.opacity = "0";
+
+            setTimeout(() => {
+                // Step 2: Push it to the bottom of our index stack array
+                const shiftedCard = cards.pop();
+                cards.unshift(shiftedCard);
+                
+                // Step 3: Run recalculation to adjust fanning layouts
+                arrangeDeckStyle();
+            }, 300);
+        }
+    </script>
+</body>
+</html>

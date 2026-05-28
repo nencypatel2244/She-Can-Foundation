@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>She Can Foundation | Home Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            cursor: none; /* Hides default cursor to enable custom premium cursor */
+        }
+
+        :root {
+            --bg-dark: #0a0a0c;
+            --panel-dark: #121216;
+            --border-glow: #1f1f27;
+            --accent-glow: #7c3aed; /* Deep Premium Violet */
+            --text-main: #f3f4f6;
+            --text-muted: #8e8e9f;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--bg-dark);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        #custom-cursor {
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference; /* Inverts color over text automatically like luxury sites */
+            transition: width 0.2s, height 0.2s;
+        }
+
+        .clickable-hover:hover ~ #custom-cursor {
+            width: 50px;
+            height: 50px;
+        }
+
+        header {
+            width: 100%;
+            border-bottom: 1px solid var(--border-glow);
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: rgba(10, 10, 12, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+        }
+
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 40px;
+        }
+
+        .brand-logo {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+        }
+
+        .brand-logo span {
+            color: var(--accent-glow);
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            margin-left: 35px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--text-main);
+        }
+
+        .fixed-join-trigger {
+            position: fixed;
+            right: 40px;
+            bottom: 40px;
+            background: var(--text-main);
+            color: var(--bg-dark);
+            text-decoration: none;
+            padding: 16px 32px;
+            font-weight: 600;
+            font-size: 14px;
+            border-radius: 40px;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.2);
+            z-index: 999;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .fixed-join-trigger:hover {
+            transform: scale(1.05) translateY(-3px);
+            background: var(--accent-glow);
+            color: var(--text-main);
+        }
+
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 140px 40px 80px 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        @keyframes microGlowFade {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-section h1 {
+            font-size: clamp(40px, 6vw, 84px);
+            font-weight: 800;
+            letter-spacing: -2px;
+            line-height: 1.05;
+            max-width: 1100px;
+            margin-bottom: 30px;
+            animation: microGlowFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero-section p {
+            font-size: clamp(16px, 2vw, 20px);
+            color: var(--text-muted);
+            max-width: 650px;
+            margin-bottom: 50px;
+            line-height: 1.5;
+            animation: microGlowFade 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero-media-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            height: 550px;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid var(--border-glow);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+            animation: microGlowFade 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero-media-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%) brightness(90%);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hero-media-wrapper:hover img {
+            transform: scale(1.03);
+        }
+
+        .grid-section {
+            max-width: 1400px;
+            margin: 100px auto;
+            padding: 0 40px;
+        }
+
+        .section-header-meta {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-glow);
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .section-headline {
+            font-size: 38px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 60px;
+        }
+
+        .framer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1px; /* Creates smooth minimal separation lines */
+            background-color: var(--border-glow);
+            border: 1px solid var(--border-glow);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .framer-card {
+            background-color: var(--panel-dark);
+            padding: 60px 40px;
+            transition: background-color 0.4s;
+        }
+
+        .framer-card:hover {
+            background-color: #17171d;
+        }
+
+        .card-meta-num {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            display: block;
+        }
+
+        .card-heading {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+
+        .card-body-text {
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        footer {
+            border-top: 1px solid var(--border-glow);
+            padding: 100px 40px 40px 40px;
+            background-color: #050507;
+        }
+
+        .footer-wrap {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 50px;
+        }
+
+        .footer-brand h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            max-width: 320px;
+            font-size: 14px;
+        }
+
+        .footer-group h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        .footer-group ul {
+            list-style: none;
+        }
+
+        .footer-group li {
+            margin-bottom: 12px;
+        }
+
+        .footer-group a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-group a:hover {
+            color: var(--text-main);
+        }
+
+        .footer-bottom-bar {
+            max-width: 1400px;
+            margin: 80px auto 0 auto;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-glow);
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+		@keyframes fluidGlow {
+		0% { background-position: 0% 50%; }
+		50% { background-position: 100% 50%; }
+		100% { background-position: 0% 50%; }
+		}
+
+		.form-submit-btn, .fixed-join-trigger {
+		transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.4s ease;
+		}
+
+		.form-submit-btn:hover, .fixed-join-trigger:hover {
+		transform: scale(1.02) translateY(-4px);
+		background: linear-gradient(-45deg, #7c3aed, #a855f7, #6366f1);
+		background-size: 200% 200%;
+		animation: fluidGlow 3s ease infinite;
+		}
+    </style>
+</head>
+<body>
+
+    <div id="custom-cursor"></div>
+
+    <a href="#" class="fixed-join-trigger clickable-hover">Join Initiative</a>
+
+    <header>
+        <div class="nav-inner">
+            <div class="brand-logo clickable-hover">She Can Foundation<span>.</span></div>
+            <nav>
+                <a href="HomePage.html" class="active clickable-hover">Home</a>
+                <a href="AboutPage.html" class="clickable-hover">About</a>
+				<a href="GalleryPage.html" class="clickable-hover">Gallery</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <h1 class="clickable-hover">Her Potential.<br>Our Purpose.</h1>
+        <p>We don't ask for much, just help us with what you can- Be it Money, Skill or Your Time.</p>
+        <div class="hero-media-wrapper clickable-hover">
+            <img src="1.jpg" alt="She Can Foundation">
+        </div>
+    </section>
+
+    <section class="grid-section">
+        <span class="section-header-meta">Global Vision, Local Action</span>
+        <h2 class="section-headline clickable-hover">The She Can Foundation Story</h2>
+
+        <div class="framer-grid">
+            <div class="framer-card clickable-hover">
+                <h3 class="card-heading">The She Can Foundation Story</h3>
+                <p class="card-body-text">We are She Can Foundation, a non-governmental organization registered under the Indian Society Act, 1860, dedicated to empowering women and creating a more equitable society. We provide support, resources, and training to women in communities across the globe, working closely with local organizations, governments, and communities to ensure that our programs are effective and sustainable. Through advocacy campaigns and initiatives, we raise awareness of women's issues. We rely on the support of individuals, corporations, and other organizations to achieve our vision. We believe that by working together, we can revolutionize society and create a better world for all.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-wrap">
+            <div class="footer-brand">
+                <h2 class="clickable-hover">She Can Foundation</h2>
+                <p>Registered National Initiative under the Indian Society Act. Grounded in functional execution and transparency matrix models.</p>
+            </div>
+            <div class="footer-group">
+                <h4>Ecosystem</h4>
+                <ul>
+					<li><a href="HomePage.html" class="active clickable-hover">Home</a></li>
+					<li><a href="AboutPage.html" class="clickable-hover">About</a></li>
+					<li><a href="GalleryPage.html" class="clickable-hover">Gallery</a></li>
+                </ul>
+            </div>
+            <div class="footer-group">
+                <h4>Legal Indexes</h4>
+                <ul>
+                    <li><a href="#" class="clickable-hover">Govt. Reg. Status</a></li>
+                    <li><a href="#" class="clickable-hover">Society Act Records</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom-bar">
+            <span>&copy; 2026 She Can Foundation. Integrated Production System.</span>
+            <span>Secure Verification Verified</span>
+        </div>
+    </footer>
+
+    <script>
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+    </script>
+</body>
+</html>

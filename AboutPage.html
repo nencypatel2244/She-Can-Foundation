@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>She Can Foundation | About Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            cursor: none;
+        }
+
+        :root {
+            --bg-dark: #0a0a0c;
+            --panel-dark: #121216;
+            --border-glow: #1f1f27;
+            --accent-glow: #7c3aed;
+            --text-main: #f3f4f6;
+            --text-muted: #8e8e9f;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--bg-dark);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        #custom-cursor {
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            position: fixed;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+            transition: width 0.2s, height 0.2s;
+        }
+
+        .clickable-hover:hover ~ #custom-cursor {
+            width: 50px;
+            height: 50px;
+        }
+
+        .fixed-join-trigger {
+            position: fixed;
+            right: 40px;
+            bottom: 40px;
+            background: var(--text-main);
+            color: var(--bg-dark);
+            text-decoration: none;
+            padding: 16px 32px;
+            font-weight: 600;
+            font-size: 14px;
+            border-radius: 40px;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.2);
+            z-index: 999;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .fixed-join-trigger:hover {
+            transform: scale(1.05) translateY(-3px);
+            background: var(--accent-glow);
+            color: var(--text-main);
+        }
+
+        header {
+            width: 100%;
+            border-bottom: 1px solid var(--border-glow);
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: rgba(10, 10, 12, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+        }
+
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 40px;
+        }
+
+        .brand-logo {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+        }
+
+        .brand-logo span {
+            color: var(--accent-glow);
+        }
+
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            margin-left: 35px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--text-main);
+        }
+
+        .about-layout-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 180px 40px 100px 40px;
+        }
+
+        @keyframes contentSlideUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .identity-split-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 60px;
+            animation: contentSlideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @media (min-width: 992px) {
+            .identity-split-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .about-text-wrapper {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .about-text-wrapper h1 {
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            margin-bottom: 30px;
+        }
+
+        .about-text-wrapper p {
+            color: var(--text-muted);
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .about-text-wrapper h3 {
+            font-size: 18px;
+            color: var(--text-main);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .join-form-wrapper {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-glow);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .form-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-main);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .premium-input {
+            width: 100%;
+            background-color: var(--panel-dark);
+            border: 1px solid var(--border-glow);
+            color: var(--text-main);
+            padding: 16px 20px;
+            font-size: 15px;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .premium-input:focus {
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 15px rgba(124, 58, 237, 0.15);
+        }
+
+        .premium-input::placeholder {
+            color: #52526b;
+        }
+
+        .form-submit-btn {
+            background-color: var(--text-main);
+            color: var(--bg-dark);
+            border: none;
+            padding: 14px 28px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            width: 100%;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .form-submit-btn:hover {
+            background-color: var(--accent-glow);
+            color: var(--text-main);
+            transform: translateY(-2px);
+        }
+
+        .about-image-wrapper {
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid var(--border-glow);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+            height: 100%;
+            min-height: 450px;
+        }
+
+        .about-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(15%) contrast(105%);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .about-image-wrapper:hover img {
+            transform: scale(1.02);
+        }
+
+        footer {
+            border-top: 1px solid var(--border-glow);
+            padding: 100px 40px 40px 40px;
+            background-color: #050507;
+            margin-top: 100px;
+        }
+
+        .footer-wrap {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 50px;
+        }
+
+        .footer-brand h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .footer-brand p {
+            color: var(--text-muted);
+            max-width: 320px;
+            font-size: 14px;
+        }
+
+        .footer-group h4 {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        .footer-group ul {
+            list-style: none;
+        }
+
+        .footer-group li {
+            margin-bottom: 12px;
+        }
+
+        .footer-group a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-group a:hover {
+            color: var(--text-main);
+        }
+
+        .footer-bottom-bar {
+            max-width: 1400px;
+            margin: 80px auto 0 auto;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-glow);
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="custom-cursor"></div>
+
+    <a href="#" class="fixed-join-trigger clickable-hover">Join Initiative</a>
+
+    <header>
+        <div class="nav-inner">
+            <div class="brand-logo clickable-hover">She Can Foundation<span>.</span></div>
+            <nav>
+                <a href="HomePage.html" class="clickable-hover">Home</a>
+                <a href="AboutPage.html" class="active clickable-hover">About</a>
+				<a href="GalleryPage.html" class="clickable-hover">Gallery</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="about-layout-container">
+        <div class="identity-split-grid">
+            <div class="about-text-wrapper">
+                <span class="section-header-meta">Who are we</span>
+                <h1 class="clickable-hover">About Us</h1>
+                <p>She Can Foundation was founded by a group of individuals who shared a common vision of creating a world where every woman has the opportunity to thrive and succeed. The idea for the organization was born out of a desire to make a real difference in the lives of women in communities across the globe. We recognized that there are countless barriers that prevent women from reaching their full potential, and we wanted to create an organization that could help break down those barriers and provide women with the resources and support they need to succeed. With a shared passion and a determination to create positive change, we set out to make our vision a reality, and She Can Foundation was born.</p>
+                
+                <h3 class="clickable-hover">What is She Can?</h3>
+                <p>She can Foundation is a non-profit organization dedicated to empowering women and creating a more equitable society. We provide support,resource,and training to women in communities across the globe, and we raised awareness of women's issues through advocacy campaigns and initiatives. We belive that every woman deserves the opportunity to thrive and succeed, regardless of her background or circumstances, and we work tirelessly to create a world where that is possible. We are committed to breaking down barriers and creating lasting change, and we invite you to join us in our mission to empower women and create a better future for all.</p>
+                
+                <div class="join-form-wrapper">
+                    <div class="form-title">// Registry Authentication</div>
+                    <form action="#" onsubmit="event.preventDefault();">
+                        <div class="input-group">
+                            <input type="text" class="premium-input clickable-hover" placeholder="Enter Full Name" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="email" class="premium-input clickable-hover" placeholder="Enter Email Address" required>
+                        </div>
+                        <button type="submit" class="form-submit-btn clickable-hover">Submit Application</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="about-image-wrapper clickable-hover">
+                <img src="6.jpg" alt="She Can Foundation">
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-wrap">
+            <div class="footer-brand">
+                <h2 class="clickable-hover">She Can Foundation</h2>
+                <p>Registered National Initiative under the Indian Society Act. Grounded in functional execution and transparency matrix models.</p>
+            </div>
+            <div class="footer-group">
+                <h4>Ecosystem</h4>
+                <ul>
+                    <li><a href="HomePage.html" class="clickable-hover">Home</a></li>
+                    <li><a href="AboutPage.html" class="active clickable-hover">About</a></li>
+					<li><a href="GalleryPage.html" class="clickable-hover">Gallery</a></li>
+                </ul>
+            </div>
+            <div class="footer-group">
+                <h4>Legal Indexes</h4>
+                <ul>
+                    <li><a href="#" class="clickable-hover">Govt. Reg. Status</a></li>
+                    <li><a href="#" class="clickable-hover">Society Act Records</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom-bar">
+            <span>&copy; 2026 She Can Foundation. Integrated Production System.</span>
+            <span>Secure Verification Verified</span>
+        </div>
+    </footer>
+
+    <script>
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+    </script>
+</body>
+</html>
